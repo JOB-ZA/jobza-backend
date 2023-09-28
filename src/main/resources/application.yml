@@ -1,0 +1,8 @@
+spring:
+  profiles:
+    active: local
+    include: connection, oauth2
+
+app:
+  auth:
+    secret-key: ${SECRET_KEY}
