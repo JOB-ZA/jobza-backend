@@ -9,6 +9,7 @@ import jobza.exception.CustomException;
 import jobza.exception.ErrorCode;
 import jobza.member.entity.Member;
 import jobza.member.repository.MemberRepository;
+import jobza.security.principal.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.minidev.json.JSONObject;
@@ -56,8 +57,11 @@ public class JwtFilter extends OncePerRequestFilter {
                 Member member = memberRepository.findByUsername(username)
                         .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
 
+                // principalDetails 생성
+                PrincipalDetails principalDetails = new PrincipalDetails(member);
+
                 // 인증 정보 생성
-                Authentication authentication = new UsernamePasswordAuthenticationToken(username, null, null);
+                Authentication authentication = new UsernamePasswordAuthenticationToken(principalDetails, null, principalDetails.getAuthorities());
                 // SecurityContextHolder에 인증 정보 설정
                 SecurityContextHolder.getContext().setAuthentication(authentication);
                 log.info("회원 인증 완료");

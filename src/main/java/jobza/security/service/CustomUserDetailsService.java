@@ -4,7 +4,7 @@ import jobza.exception.CustomException;
 import jobza.exception.ErrorCode;
 import jobza.member.entity.Member;
 import jobza.member.repository.MemberRepository;
-import jobza.security.context.MemberContext;
+import jobza.security.principal.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
@@ -30,10 +30,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         Member findMember = memberRepository.findByUsername(username)
                 .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
 
-
-        List<GrantedAuthority> roles = new ArrayList<>();
-        roles.add(new SimpleGrantedAuthority(findMember.getRole().name()));
-
-        return new MemberContext(findMember, roles);
+        log.info("loadUserByUsername 실행");
+        return new PrincipalDetails(findMember);
     }
 }

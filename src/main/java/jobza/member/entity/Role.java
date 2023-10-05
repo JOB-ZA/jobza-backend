@@ -1,7 +1,7 @@
 package jobza.member.entity;
 
 public enum Role {
-    ROLE_USER("일반 사용자"), ROLE_REGISTRANT("이벤트 등록자");
+    ROLE_USER("일반 회원"), ROLE_CORP("기업 회원");
 
     private String description;
 
