@@ -19,7 +19,7 @@ public class MemberController {
 
     private final OauthService oauthService;
 
-    @Operation(summary = "카카오 로그인", description = "카카오 로그인이라 아래 링크로 이동해서 로그인 테스트 진행 하면 됩니다<br>https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=8fd7a1f394d9bbd09fdfdd3827146d73&redirect_uri=http://localhost:8080/login/oauth2/code/kakao")
+    @Operation(summary = "카카오 로그인", description = "카카오 로그인이라 아래 링크로 이동해서 로그인 테스트 진행 하면 됩니다<br>https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=de47672601f1318713d6ebbfca037682&redirect_uri=http://localhost:8080/login/oauth2/code/kakao")
     @GetMapping("/kakaoLogin")
     public void login() {
     }
