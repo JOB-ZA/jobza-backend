@@ -5,4 +5,15 @@ spring:
 
 app:
   auth:
-    secret-key: ${SECRET_KEY}
+    secret-key: ${TOKEN_SECRET_KEY}
+
+cloud:
+  aws:
+    credentials:
+      access-key: ${S3_ACCESS_KEY}
+      secret-key: ${S3_SECRET_ACCESS_KEY}
+    s3:
+      bucket: job-za-bucket
+    stack.auto: false
+    region:
+      static: ap-northeast-2
