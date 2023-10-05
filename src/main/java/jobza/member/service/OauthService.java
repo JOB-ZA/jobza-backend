@@ -5,6 +5,7 @@ import jobza.member.dto.LoginResponse;
 import jobza.member.dto.TokenRequest;
 import jobza.member.dto.TokenResponse;
 import jobza.member.entity.Member;
+import jobza.member.entity.Role;
 import jobza.member.repository.MemberRepository;
 import jobza.security.filter.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
@@ -98,6 +99,7 @@ public class OauthService {
             Member member = Member.builder()
                     .username(responseMap.get("email"))
                     .name(responseMap.get("nickname"))
+                    .role(Role.ROLE_USER)
                     .profileImage(responseMap.get("profileImageUrl"))
                     .build();
             memberRepository.save(member);
