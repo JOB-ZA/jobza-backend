@@ -1,6 +1,7 @@
 package jobza.resume.entity;
 
 import jakarta.persistence.*;
+import jobza.common.BaseEntity;
 import jobza.member.entity.Member;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,7 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Resume {
+public class Resume extends BaseEntity {
     @Id @GeneratedValue
     @Column(name = "resume_id")
     private Long id;

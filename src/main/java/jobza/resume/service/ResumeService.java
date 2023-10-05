@@ -10,6 +10,7 @@ import jobza.exception.ErrorCode;
 import jobza.member.entity.Member;
 import jobza.member.repository.MemberRepository;
 import jobza.member.service.MemberService;
+import jobza.resume.dto.ResumeResponse;
 import jobza.resume.entity.Resume;
 import jobza.resume.repository.ResumeRepository;
 import lombok.RequiredArgsConstructor;
@@ -74,6 +75,20 @@ public class ResumeService {
         return resumeRepository.findByMemberId(memberId);
     }
 
+    public void deleteResume(Resume resume) {
+        deleteFileFromS3(resume.getStoreFileName()); // s3 에서 resume 제거
+        resumeRepository.deleteById(resume.getId()); // db 에서 resume 제거
+    }
+
+    // resume 정보 반환
+    public ResumeResponse getResumeInfo(Long memberId) {
+        Resume resume = resumeRepository.findByMemberId(memberId)
+                .orElseThrow(() -> new CustomException(ErrorCode.RESUME_NOT_FOUND));
+        return ResumeResponse.from(resume);
+    }
+
+
+    // s3 upload
     private String uploadFileToS3(MultipartFile multipartFile) {
         String storeFileName = createStoreImageName(".pdf");
         InputStream inputStream;
@@ -94,14 +109,12 @@ public class ResumeService {
         return storeFileName;
     }
 
+    // s3 delete
     private void deleteFileFromS3(String storeFileName) {
         DeleteObjectRequest deleteObjectRequest = new DeleteObjectRequest(bucket, storeFileName);
         amazonS3Client.deleteObject(deleteObjectRequest);
         log.info("S3 파일 삭제 완료");
     }
 
-    public void deleteResume(Resume resume) {
-        deleteFileFromS3(resume.getStoreFileName()); // s3 에서 resume 제거
-        resumeRepository.deleteById(resume.getId()); // db 에서 resume 제거
-    }
+
 }
