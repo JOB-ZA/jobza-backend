@@ -24,7 +24,7 @@ public class ResumeController {
 
     private final ResumeService resumeService;
 
-    @Operation(summary = "이력서 업로드", description = "이력서 pdf 업로드")
+    @Operation(summary = "이력서 업로드", description = "이력서 pdf 업로드<br>이미 업로드된 이력서가 있다면 지우고 새로 올린 이력서로 저장(업데이트 기능 포함)")
     @PostMapping( value = "/resume", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Response> uploadResume(@ModelAttribute ResumeRequest resumeRequest,
                                                  @AuthenticationPrincipal PrincipalDetails principalDetails) {
