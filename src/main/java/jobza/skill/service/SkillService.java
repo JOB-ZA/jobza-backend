@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -23,6 +24,13 @@ public class SkillService {
 
     public void saveSkill(Long memberId, List<String> skillNameList) {
         Member member = memberService.findMemberById(memberId);
+
+        Optional<Skill> existsSkill = skillRepository.existsSkillByMember(memberId);
+        if (existsSkill.isPresent()) {
+            skillRepository.deleteByMemberId(memberId);
+            log.info("기존에 저장된 skill 전체 삭제");
+        }
+
         List<Skill> SkillList = skillNameList.stream()
                 .map(skillName -> Skill.builder()
                         .name(skillName)
