@@ -12,8 +12,8 @@ import org.springframework.context.annotation.Configuration;
 import java.util.Arrays;
 
 @OpenAPIDefinition(
-        info = @Info(title = "tickerBell API 명세서",
-                description = "tickerBell API 명세서입니다.",
+        info = @Info(title = "job-za API 명세서",
+                description = "job-za API 명세서입니다.",
                 version = "v1"))
 @Configuration
 public class SwaggerConfig {

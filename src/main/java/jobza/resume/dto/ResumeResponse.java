@@ -5,6 +5,7 @@ import lombok.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
 @Builder
 public class ResumeResponse {
     private Long resumeId;

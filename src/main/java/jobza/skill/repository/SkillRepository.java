@@ -15,8 +15,8 @@ public interface SkillRepository extends JpaRepository<Skill, Long> {
     @Query("select s from Skill s where s.member.id = :memberId")
     List<Skill> findByMemberId(@Param("memberId") Long memberId);
 
-    @Query("select s from Skill s where s.member.id = :memberId")
-    Optional<Skill> existsSkillByMember(@Param("memberId") Long memberId);
+    @Query("select count(s) > 0 from Skill s where s.member.id = :memberId")
+    Boolean existsSkillByMember(@Param("memberId") Long memberId);
 
     @Modifying
     @Query("delete from Skill s where s.member.id = :memberId")

@@ -80,13 +80,19 @@ public class ResumeService {
         resumeRepository.deleteById(resume.getId()); // db 에서 resume 제거
     }
 
+    // s3 delete
+    private void deleteFileFromS3(String storeFileName) {
+        DeleteObjectRequest deleteObjectRequest = new DeleteObjectRequest(bucket, storeFileName);
+        amazonS3Client.deleteObject(deleteObjectRequest);
+        log.info("S3 파일 삭제 완료");
+    }
+
     // resume 정보 반환
     public ResumeResponse getResumeInfo(Long memberId) {
         Resume resume = resumeRepository.findByMemberId(memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.RESUME_NOT_FOUND));
         return ResumeResponse.from(resume);
     }
-
 
     // s3 upload
     private String uploadFileToS3(MultipartFile multipartFile) {
@@ -109,11 +115,13 @@ public class ResumeService {
         return storeFileName;
     }
 
-    // s3 delete
-    private void deleteFileFromS3(String storeFileName) {
-        DeleteObjectRequest deleteObjectRequest = new DeleteObjectRequest(bucket, storeFileName);
-        amazonS3Client.deleteObject(deleteObjectRequest);
-        log.info("S3 파일 삭제 완료");
+    public InputStream getPdfFromS3(Long memberId) {
+        Resume resume = resumeRepository.findByMemberId(memberId)
+                .orElseThrow(() -> new CustomException(ErrorCode.RESUME_NOT_FOUND));
+        String storeFileName = resume.getStoreFileName();
+        S3Object s3Object = amazonS3Client.getObject(bucket, storeFileName);
+
+        return s3Object.getObjectContent();
     }
 
 
