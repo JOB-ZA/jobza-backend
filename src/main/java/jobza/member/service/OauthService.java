@@ -90,6 +90,8 @@ public class OauthService {
             LoginResponse loginResponse = LoginResponse.builder()
                     .accessToken(accessToken)
                     .build();
+            log.info("loginResponse 생성");
+            System.out.println(loginResponse);
             // 로그인 완료 시 토큰과 함께 반환
             return ResponseEntity.ok(new Response(loginResponse, "카카오 로그인 성공"));
         }
@@ -109,6 +111,8 @@ public class OauthService {
             LoginResponse loginResponse = LoginResponse.builder()
                     .accessToken(accessToken)
                     .build();
+            log.info("loginResponse 생성");
+            System.out.println(loginResponse);
             return ResponseEntity.ok(new Response(loginResponse, "카카오 로그인 성공"));
         }
     }
