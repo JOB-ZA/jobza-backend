@@ -9,7 +9,6 @@ import jobza.exception.CustomException;
 import jobza.exception.ErrorCode;
 import jobza.member.entity.Member;
 import jobza.member.repository.MemberRepository;
-import jobza.member.service.MemberService;
 import jobza.resume.dto.ResumeResponse;
 import jobza.resume.entity.Resume;
 import jobza.resume.repository.ResumeRepository;
@@ -18,7 +17,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.ObjectUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -34,7 +32,7 @@ import java.util.UUID;
 public class ResumeService {
     private final AmazonS3Client amazonS3Client;
     private final ResumeRepository resumeRepository;
-    private final MemberService memberService;
+    private final MemberRepository memberRepository;
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
@@ -55,7 +53,8 @@ public class ResumeService {
             log.info("storeImageName: " + storeFileName);
             String s3Url = amazonS3Client.getUrl(bucket, storeFileName).toString();
 
-            Member findMember = memberService.findMemberById(memberId);
+            Member findMember = memberRepository.findById(memberId)
+                    .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
 
             Resume resumeEntity = Resume.builder()
                     .storeFileName(storeFileName)
@@ -88,10 +87,8 @@ public class ResumeService {
     }
 
     // resume 정보 반환
-    public ResumeResponse getResumeInfo(Long memberId) {
-        Resume resume = resumeRepository.findByMemberId(memberId)
-                .orElseThrow(() -> new CustomException(ErrorCode.RESUME_NOT_FOUND));
-        return ResumeResponse.from(resume);
+    public Optional<Resume> getResumeInfo(Long memberId) {
+        return resumeRepository.findByMemberId(memberId);
     }
 
     // s3 upload
