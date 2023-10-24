@@ -73,3 +73,9 @@ dependencies {
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+
+//SNAPSHOT 생성 x
+jar {
+	enabled = false
+}
