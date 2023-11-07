@@ -35,3 +35,6 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### python api ###
+src/**/pythonApi
