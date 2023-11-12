@@ -1,9 +1,12 @@
 package jobza.security.config;
 
+import jobza.security.exceptionHandler.AccessDeniedHandlerImpl;
+import jobza.security.exceptionHandler.AuthenticationEntryPointHandlerImpl;
 import jobza.security.service.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -19,6 +22,8 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     private final CustomUserDetailsService customUserDetailsService;
+    private final AccessDeniedHandlerImpl accessDeniedHandler;
+    private final AuthenticationEntryPointHandlerImpl authenticationEntryPointHandler;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -40,7 +45,9 @@ public class SecurityConfig {
 
                 .authorizeHttpRequests()
                 .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-resources/**").permitAll()
-                .requestMatchers("/**").permitAll()
+                .requestMatchers(HttpMethod.POST, "/skill", "/resume", "job-post/prefer").authenticated()
+                .requestMatchers(HttpMethod.GET, "/recommend-job/skill", "/recommend-job/resume", "/myPage").authenticated()
+                .anyRequest().permitAll()
                 .and()
 
                 .oauth2Login()
@@ -50,6 +57,10 @@ public class SecurityConfig {
 
         http
                 .userDetailsService(customUserDetailsService);
+
+        http.exceptionHandling()
+                .accessDeniedHandler(accessDeniedHandler) // 커스텀 AccessDeniedHandler 등록
+                .authenticationEntryPoint(authenticationEntryPointHandler); // 커스텀 AuthenticationEntryPoint 등록
 
         return http.build();
     }
