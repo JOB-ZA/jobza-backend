@@ -4,13 +4,12 @@ import io.swagger.v3.oas.annotations.Operation;
 import jobza.common.response.Response;
 import jobza.recommend.dto.JobPostResponse;
 import jobza.recommend.dto.PreferRequest;
+import jobza.recommend.entity.Employment;
 import jobza.recommend.service.RecommendService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.List;
@@ -26,5 +25,12 @@ public class RecommendController {
     public ResponseEntity<Response> jobPostByMemberPrefer(@RequestBody PreferRequest request) throws IOException {
         List<JobPostResponse> responseList = recommendService.jobPostByMemberPrefer(request);
         return ResponseEntity.ok(new Response(responseList, "맞춤 공고 데이터 반환"));
+    }
+
+    @Operation(summary = "공고 상세 데이터 요청", description = "id 값으로 공고 상세 데이터 반환")
+    @GetMapping("/job-post/{jobId}")
+    public ResponseEntity<Response> jobPostById(@PathVariable String jobId) {
+        Employment job = recommendService.findById(jobId);
+        return ResponseEntity.ok(new Response(job, "상세 공고 데이터 반환"));
     }
 }

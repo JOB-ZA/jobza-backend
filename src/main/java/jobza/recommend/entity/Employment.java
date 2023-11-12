@@ -1,21 +1,25 @@
-package jobza.recommend.dto;
+package jobza.recommend.entity;
 
-import lombok.AllArgsConstructor;
+import jakarta.persistence.Column;
+import jakarta.persistence.Id;
+import lombok.Data;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.List;
-@Getter @Setter
-@AllArgsConstructor
-@NoArgsConstructor
-public class JobPostResponse {
+@Data
+@Document(collation = "employment")
+public class Employment {
+
+    @Id
     private String id;
+
     private String occupation1;
     private String occupation2;
     private String occupation3;
     private String regionCd;
     private String wantedAuthNo;
+
     private CorpInfo corpInfo;
     private WantedInfo wantedInfo;
     private SelMthdInfo selMthdInfo;
@@ -24,15 +28,16 @@ public class JobPostResponse {
     private EmpChargerInfo empChargerInfo;
 
     @Getter @Setter
-    static class CorpInfo {
+    public static class CorpInfo {
         private String corpNm;
         private String indTpCdNm;
         private String busiSize;
         private String yrSalesAmt;
         private String totPsncnt;
     }
+
     @Getter @Setter
-    static class WantedInfo {
+    public static class WantedInfo {
         private String jobsNm;
         private String wantedTitle;
         private String relJobsNm;
@@ -43,9 +48,9 @@ public class JobPostResponse {
         private String eduNm;
         private String major;
         private String certificate;
-        private List<String> compAbl;
-        private List<String> pfCond;
-        private List<String> etcPfCond;
+        private String[] compAbl;
+        private String[] pfCond;
+        private String[] etcPfCond;
         private String srchKeywordNm;
         private String dtlRecrContUrl;
         private String jobsCd;
@@ -54,46 +59,42 @@ public class JobPostResponse {
         private String empTpCd;
         private String enterTpCd;
         private String salTpCd;
-
-        // Getters and setters
     }
+
     @Getter @Setter
-    static class SelMthdInfo {
+    public static class SelMthdInfo {
         private String receiptCloseDt;
         private String selMthd;
         private String rcptMthd;
-        private List<String> submitDoc;
+        private String[] submitDoc;
         private String etcHopeCont;
         private String workRegion;
-
-        // Getters and setters
     }
+
     @Getter @Setter
-    static class WorkInfo {
+    public static class WorkInfo {
         private String salTpNm;
         private String workdayWorkhrCont;
-        private List<String> fourIns;
+        private String[] fourIns;
         private String retirepay;
-        private List<String> etcWelfare;
+        private String[] etcWelfare;
         private String disableCvntl;
-
-        // Getters and setters
     }
+
     @Getter @Setter
-    static class LocationInfo {
+    public static class LocationInfo {
         private String staAreaRegionCd;
         private String lineCd;
         private String staNmCd;
         private String exitNoCd;
         private String walkDistCd;
         private String nearLine;
-
     }
+
     @Getter @Setter
-    static class EmpChargerInfo {
+    public static class EmpChargerInfo {
         private String contactTelno;
         private String empChargerDpt;
     }
-
 }
 

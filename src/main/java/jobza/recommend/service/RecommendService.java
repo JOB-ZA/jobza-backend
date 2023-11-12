@@ -1,8 +1,12 @@
 package jobza.recommend.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jobza.exception.CustomException;
+import jobza.exception.ErrorCode;
 import jobza.recommend.dto.JobPostResponse;
 import jobza.recommend.dto.PreferRequest;
+import jobza.recommend.entity.Employment;
+import jobza.recommend.repository.JobRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -19,6 +23,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 public class RecommendService {
+    private final JobRepository jobRepository;
 
     public List<JobPostResponse> jobPostByMemberPrefer(PreferRequest request) throws IOException {
         String path = "src/main/java/jobza/pythonApi/datas/select_job.py";
@@ -52,5 +57,10 @@ public class RecommendService {
             responseList.add(j);
         }
         return responseList;
+    }
+
+    public Employment findById(String jobId) {
+        return jobRepository.findById(jobId)
+                .orElseThrow(() -> new CustomException(ErrorCode.JOB_NOT_FOUND));
     }
 }
