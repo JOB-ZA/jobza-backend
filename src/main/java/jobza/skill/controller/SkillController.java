@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class SkillController {
     private final SkillService skillService;
 
-    @Operation(summary = "skill 저장 되는지 테스트 엔드포인트", description = "나중에 지울 예정")
+    @Operation(summary = "skill 저장", description = "")
     @PostMapping("/skill")
     public ResponseEntity<Response> saveSkills(@RequestBody SkillRequest skillRequest,
                                                @AuthenticationPrincipal PrincipalDetails principalDetails) {
