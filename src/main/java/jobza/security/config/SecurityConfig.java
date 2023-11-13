@@ -45,8 +45,8 @@ public class SecurityConfig {
 
                 .authorizeHttpRequests()
                 .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-resources/**").permitAll()
-                .requestMatchers(HttpMethod.POST, "/skill", "/resume", "job-post/prefer").authenticated()
-                .requestMatchers(HttpMethod.GET, "/recommend-job/skill", "/recommend-job/resume", "/myPage").authenticated()
+                .requestMatchers(HttpMethod.POST, "/skill", "/resume", "job-post/prefer").permitAll()
+                .requestMatchers(HttpMethod.GET, "/recommend-job/skill", "/recommend-job/resume", "/myPage").permitAll()
                 .anyRequest().permitAll()
                 .and()
 
