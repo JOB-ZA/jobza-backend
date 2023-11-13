@@ -2,6 +2,7 @@ package jobza.security.config;
 
 import jobza.security.exceptionHandler.AccessDeniedHandlerImpl;
 import jobza.security.exceptionHandler.AuthenticationEntryPointHandlerImpl;
+import jobza.security.filter.JwtFilter;
 import jobza.security.service.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -15,6 +16,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -24,6 +26,8 @@ public class SecurityConfig {
     private final CustomUserDetailsService customUserDetailsService;
     private final AccessDeniedHandlerImpl accessDeniedHandler;
     private final AuthenticationEntryPointHandlerImpl authenticationEntryPointHandler;
+    private final JwtFilter jwtFilter;
+
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -45,9 +49,8 @@ public class SecurityConfig {
 
                 .authorizeHttpRequests()
                 .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-resources/**").permitAll()
-                .requestMatchers(HttpMethod.POST, "/skill", "/resume", "job-post/prefer").permitAll()
-                .requestMatchers(HttpMethod.GET, "/recommend-job/skill", "/recommend-job/resume", "/myPage").permitAll()
-                .anyRequest().permitAll()
+                .requestMatchers(HttpMethod.GET, "/login/oauth2/code").permitAll()
+                .anyRequest().authenticated()
                 .and()
 
                 .oauth2Login()
@@ -57,6 +60,10 @@ public class SecurityConfig {
 
         http
                 .userDetailsService(customUserDetailsService);
+
+        http
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+
 
         http.exceptionHandling()
                 .accessDeniedHandler(accessDeniedHandler) // 커스텀 AccessDeniedHandler 등록
