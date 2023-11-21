@@ -33,11 +33,4 @@ public class RecommendController {
         Employment job = recommendService.findByWantedAuthNo(wantedAuthNo);
         return ResponseEntity.ok(new Response(job, "상세 공고 데이터 반환"));
     }
-
-    @Operation(summary = "공고 상세 데이터 요청", description = "id 값으로 공고 상세 데이터 반환")
-    @GetMapping("/job-post-id/{id}")
-    public ResponseEntity<Response> jobPostById_(@PathVariable String id) {
-        Employment job = recommendService.findById(id);
-        return ResponseEntity.ok(new Response(job, "상세 공고 데이터 반환"));
-    }
 }
