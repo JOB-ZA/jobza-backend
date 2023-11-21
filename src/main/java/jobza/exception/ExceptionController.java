@@ -13,11 +13,17 @@ public class ExceptionController {
 
 
     @ExceptionHandler(CustomException.class)
-    public ResponseEntity<?> handleCustomException(CustomException e, Model model) {
+    public ResponseEntity<?> handleCustomException(CustomException e) {
         log.info("핸들링한 에러 발생");
         return ResponseEntity.badRequest().body(new Response(e.getErrorMessage(), "커스텀 예외 반환"));
     }
 
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<?> handleException(Exception e) {
+        log.info("에러: " + e);
+        log.info("핸들링하지 않은 에러 발생");
+        return ResponseEntity.badRequest().body(new Response(e.getMessage(), "핸들링 하지 않은 에러 반환"));
+    }
 
 //    @ExceptionHandler(Exception.class)
 //    public ResponseEntity<?> handleCustomException(Exception e, Model model) {

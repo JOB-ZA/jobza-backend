@@ -10,7 +10,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class JobPostResponse {
-    private String id;
     private String occupation1;
     private String occupation2;
     private String occupation3;

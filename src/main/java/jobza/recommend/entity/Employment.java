@@ -8,7 +8,7 @@ import lombok.Setter;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Data
-@Document(collation = "employment")
+@Document(collation = "job.employment")
 public class Employment {
 
     @Id

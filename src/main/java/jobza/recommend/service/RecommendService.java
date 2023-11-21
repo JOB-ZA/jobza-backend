@@ -59,8 +59,13 @@ public class RecommendService {
         return responseList;
     }
 
-    public Employment findById(String jobId) {
-        return jobRepository.findById(jobId)
+    public Employment findByWantedAuthNo(String wantedAuthNo) {
+        return jobRepository.findByWantedAuthNo(wantedAuthNo)
+                .orElseThrow(() -> new CustomException(ErrorCode.JOB_NOT_FOUND));
+    }
+
+    public Employment findById(String id) {
+        return jobRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.JOB_NOT_FOUND));
     }
 }
