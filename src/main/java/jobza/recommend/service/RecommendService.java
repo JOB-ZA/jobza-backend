@@ -61,12 +61,12 @@ public class RecommendService {
         return responseList;
     }
 
-    public Employment findByWantedAuthNo(@RequestParam("wantedAuthNo") String wantedAuthNo) {
+    public Employment findByWantedAuthNo(@RequestParam(name = "wantedAuthNo") String wantedAuthNo) {
         return jobRepository.findByWantedAuthNo(wantedAuthNo)
                 .orElseThrow(() -> new CustomException(ErrorCode.JOB_NOT_FOUND));
     }
 
-    public JobPostResponse findByWantedAuthNoWithPython(@RequestParam("wantedAuthNo") String wantedAuthNo) throws IOException {
+    public JobPostResponse findByWantedAuthNoWithPython(@RequestParam(name = "wantedAuthNo") String wantedAuthNo) throws IOException {
         String path = "src/main/java/jobza/pythonApi/datas/getData.py";
         ProcessBuilder processBuilder = new ProcessBuilder(
                 "python", path, wantedAuthNo);
