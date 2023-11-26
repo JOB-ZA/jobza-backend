@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -60,12 +61,12 @@ public class RecommendService {
         return responseList;
     }
 
-    public Employment findByWantedAuthNo(String wantedAuthNo) {
+    public Employment findByWantedAuthNo(@RequestParam("wantedAuthNo") String wantedAuthNo) {
         return jobRepository.findByWantedAuthNo(wantedAuthNo)
                 .orElseThrow(() -> new CustomException(ErrorCode.JOB_NOT_FOUND));
     }
 
-    public JobPostResponse findByWantedAuthNoWithPython(String wantedAuthNo) throws IOException {
+    public JobPostResponse findByWantedAuthNoWithPython(@RequestParam("wantedAuthNo") String wantedAuthNo) throws IOException {
         String path = "src/main/java/jobza/pythonApi/datas/getData.py";
         ProcessBuilder processBuilder = new ProcessBuilder(
                 "python", path, wantedAuthNo);
