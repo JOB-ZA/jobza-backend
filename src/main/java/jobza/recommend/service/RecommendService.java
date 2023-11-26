@@ -64,4 +64,31 @@ public class RecommendService {
         return jobRepository.findByWantedAuthNo(wantedAuthNo)
                 .orElseThrow(() -> new CustomException(ErrorCode.JOB_NOT_FOUND));
     }
+
+    public JobPostResponse findByWantedAuthNoWithPython(String wantedAuthNo) throws IOException {
+        String path = "src/main/java/jobza/pythonApi/datas/getData.py";
+        ProcessBuilder processBuilder = new ProcessBuilder(
+                "python", path, wantedAuthNo);
+        processBuilder.redirectErrorStream(true); // 표준 오류 스트림을 표준 출력 스트림으로 병합
+        Process result = processBuilder.start();
+
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(result.getInputStream(), "euc-kr"));
+
+        // JSON 데이터를 저장하기 위한 StringBuilder
+        StringBuilder jsonDataBuilder = new StringBuilder();
+        String line;
+
+        while ((line = bufferedReader.readLine()) != null) {
+            jsonDataBuilder.append(line);
+        }
+
+        // JSON 데이터 문자열
+        String jsonDataFromPython = jsonDataBuilder.toString();
+        System.out.println(jsonDataFromPython);
+        // JSON 데이터를 JobPostResponse 배열로 파싱
+        ObjectMapper objectMapper = new ObjectMapper();
+        JobPostResponse jobPostResponse = objectMapper.readValue(jsonDataFromPython, JobPostResponse.class);
+
+        return jobPostResponse;
+    }
 }

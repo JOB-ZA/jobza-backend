@@ -33,4 +33,11 @@ public class RecommendController {
         Employment job = recommendService.findByWantedAuthNo(wantedAuthNo);
         return ResponseEntity.ok(new Response(job, "상세 공고 데이터 반환"));
     }
+
+    @Operation(summary = "공고 상세 데이터 요청 with python", description = "id 값으로 공고 상세 데이터 반환")
+    @GetMapping("/job-post/python/{wantedAuthNo}")
+    public ResponseEntity<Response> jobPostByIdWithPython(@PathVariable String wantedAuthNo) throws IOException {
+        JobPostResponse jobPostResponse = recommendService.findByWantedAuthNoWithPython(wantedAuthNo);
+        return ResponseEntity.ok(new Response(jobPostResponse, "상세 공고 데이터 반환"));
+    }
 }
