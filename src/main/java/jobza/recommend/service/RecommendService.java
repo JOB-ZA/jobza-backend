@@ -3,6 +3,8 @@ package jobza.recommend.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jobza.exception.CustomException;
 import jobza.exception.ErrorCode;
+import jobza.recommend.dto.ChartRequest;
+import jobza.recommend.dto.ChartResponse;
 import jobza.recommend.dto.JobPostResponse;
 import jobza.recommend.dto.PreferRequest;
 import jobza.recommend.entity.Employment;
@@ -29,9 +31,9 @@ public class RecommendService {
     public List<JobPostResponse> jobPostByMemberPrefer(PreferRequest request) throws IOException {
         String path = "src/main/java/jobza/pythonApi/datas/select_job.py";
         ProcessBuilder processBuilder = new ProcessBuilder(
-                "python", path, request.getJob(), request.getCafe(),
-                request.getHospital(), request.getHealth(), request.getPark(),
-                request.getMart(), request.getFastFood());
+                "python", path, request.getJob(),
+                request.getPark(), request.getCafe(), request.getFastFood(),
+                request.getMart(), request.getHospital(), request.getHealth());
         processBuilder.redirectErrorStream(true); // 표준 오류 스트림을 표준 출력 스트림으로 병합
         Process result = processBuilder.start();
 
@@ -60,11 +62,6 @@ public class RecommendService {
         return responseList;
     }
 
-    public Employment findByWantedAuthNo(String wantedAuthNo) {
-        return jobRepository.findByWantedAuthNo(wantedAuthNo)
-                .orElseThrow(() -> new CustomException(ErrorCode.JOB_NOT_FOUND));
-    }
-
     public JobPostResponse findByWantedAuthNoWithPython(String wantedAuthNo) throws IOException {
         String path = "src/main/java/jobza/pythonApi/datas/getData.py";
         ProcessBuilder processBuilder = new ProcessBuilder(
@@ -91,4 +88,62 @@ public class RecommendService {
 
         return jobPostResponse;
     }
+
+    public Employment findByWantedAuthNo(String wantedAuthNo) {
+        return jobRepository.findByWantedAuthNo(wantedAuthNo)
+                .orElseThrow(() -> new CustomException(ErrorCode.JOB_NOT_FOUND));
+    }
+
+
+    public ChartResponse getChartData(ChartRequest request, PreferRequest preferRequest) throws IOException {
+        String path = "src/main/java/jobza/pythonApi/datas/charts.py";
+        String type = "";
+        if (request.getIsPie() && !request.getIsRadar()) {
+            type = "pie";
+        } else if (!request.getIsPie() && request.getIsRadar()){
+            type = "radar";
+        } else {
+            throw new CustomException(ErrorCode.CHART_TYPE_NOT_VALID);
+        }
+
+        ProcessBuilder processBuilder = new ProcessBuilder(
+                "python", path, request.getWantedAuthNo(),
+                preferRequest.getPark(), preferRequest.getCafe(), preferRequest.getFastFood(),
+                preferRequest.getMart(), preferRequest.getHospital(), preferRequest.getHealth(),
+                type);
+        processBuilder.redirectErrorStream(true); // 표준 오류 스트림을 표준 출력 스트림으로 병합
+        Process result = processBuilder.start();
+
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(result.getInputStream(), "euc-kr"));
+
+        // JSON 데이터를 저장하기 위한 StringBuilder
+        StringBuilder jsonDataBuilder = new StringBuilder();
+        String line;
+
+        while ((line = bufferedReader.readLine()) != null) {
+            jsonDataBuilder.append(line);
+        }
+
+        // JSON 데이터 문자열
+        String jsonDataFromPython = jsonDataBuilder.toString();
+        System.out.println(jsonDataFromPython);
+        // JSON 데이터를 JobPostResponse 배열로 파싱
+        ObjectMapper objectMapper = new ObjectMapper();
+        ChartResponse chartResponse = objectMapper.readValue(jsonDataFromPython, ChartResponse.class);
+
+        return chartResponse;
+    }
+
+
 }
+
+//{
+//    "names": ['공원','스타벅스','맥도날드','대형마트','병원','헬스장'],
+//    "pie": [0.0, 0.11863219506239386, 0.0, 0.003182329878216937, 0.0, 0.0015782534311454114]
+//}
+//
+//{
+//    "names": ['공원','스타벅스','맥도날드','대형마트','병원','헬스장'],
+//    "min": [5, 3, 13, 9, 5, 3],
+//    "max": [29, 29, 16, 18, 26, 28]
+//}
