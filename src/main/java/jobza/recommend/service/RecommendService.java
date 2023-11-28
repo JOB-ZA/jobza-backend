@@ -95,7 +95,7 @@ public class RecommendService {
     }
 
 
-    public ChartResponse getChartData(ChartRequest request, PreferRequest preferRequest) throws IOException {
+    public ChartResponse getChartData(ChartRequest request) throws IOException {
         String path = "src/main/java/jobza/pythonApi/datas/charts.py";
         String type = "";
         if (request.getIsPie() && !request.getIsRadar()) {
@@ -108,8 +108,8 @@ public class RecommendService {
 
         ProcessBuilder processBuilder = new ProcessBuilder(
                 "python", path, request.getWantedAuthNo(),
-                preferRequest.getPark(), preferRequest.getCafe(), preferRequest.getFastFood(),
-                preferRequest.getMart(), preferRequest.getHospital(), preferRequest.getHealth(),
+                request.getPark(), request.getCafe(), request.getFastFood(),
+                request.getMart(), request.getHospital(), request.getHealth(),
                 type);
         processBuilder.redirectErrorStream(true); // 표준 오류 스트림을 표준 출력 스트림으로 병합
         Process result = processBuilder.start();
