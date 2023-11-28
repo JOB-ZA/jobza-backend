@@ -3,10 +3,7 @@ package jobza.recommend.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jobza.exception.CustomException;
 import jobza.exception.ErrorCode;
-import jobza.recommend.dto.ChartRequest;
-import jobza.recommend.dto.ChartResponse;
-import jobza.recommend.dto.JobPostResponse;
-import jobza.recommend.dto.PreferRequest;
+import jobza.recommend.dto.*;
 import jobza.recommend.entity.Employment;
 import jobza.recommend.repository.JobRepository;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +25,7 @@ import java.util.List;
 public class RecommendService {
     private final JobRepository jobRepository;
 
-    public List<JobPostResponse> jobPostByMemberPrefer(PreferRequest request) throws IOException {
+    public List<JobPostListResponse> jobPostByMemberPrefer(PreferRequest request) throws IOException {
         String path = "src/main/java/jobza/pythonApi/datas/select_job.py";
         ProcessBuilder processBuilder = new ProcessBuilder(
                 "python", path, request.getJob(),
@@ -52,11 +49,11 @@ public class RecommendService {
         System.out.println(jsonDataFromPython);
         // JSON 데이터를 JobPostResponse 배열로 파싱
         ObjectMapper objectMapper = new ObjectMapper();
-        JobPostResponse[] myDTOs = objectMapper.readValue(jsonDataFromPython, JobPostResponse[].class);
+        JobPostListResponse[] myDTOs = objectMapper.readValue(jsonDataFromPython, JobPostListResponse[].class);
 
         // List 로 변환
-        List<JobPostResponse> responseList = new ArrayList<>();
-        for (JobPostResponse j : myDTOs) {
+        List<JobPostListResponse> responseList = new ArrayList<>();
+        for (JobPostListResponse j : myDTOs) {
             responseList.add(j);
         }
         return responseList;

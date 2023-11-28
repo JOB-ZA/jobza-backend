@@ -3,10 +3,7 @@ package jobza.recommend.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpSession;
 import jobza.common.response.Response;
-import jobza.recommend.dto.ChartRequest;
-import jobza.recommend.dto.ChartResponse;
-import jobza.recommend.dto.JobPostResponse;
-import jobza.recommend.dto.PreferRequest;
+import jobza.recommend.dto.*;
 import jobza.recommend.entity.Employment;
 import jobza.recommend.service.RecommendService;
 import jobza.security.principal.PrincipalDetails;
@@ -29,7 +26,7 @@ public class RecommendController {
     @PostMapping("/job-post/prefer")
     public ResponseEntity<Response> jobPostByMemberPrefer(@AuthenticationPrincipal PrincipalDetails principalDetails,
                                                           @RequestBody PreferRequest request) throws IOException {
-        List<JobPostResponse> responseList = recommendService.jobPostByMemberPrefer(request);
+        List<JobPostListResponse> responseList = recommendService.jobPostByMemberPrefer(request);
         Long memberId = principalDetails.getMember().getId();
 //        session.setAttribute("request", request);
 //        PreferRequest preferRequestSession = (PreferRequest) session.getAttribute("request");
