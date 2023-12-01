@@ -13,4 +13,5 @@ public class ChartResponse {
     private List<Float> pie;
     private List<Integer> min;
     private List<Integer> max;
+    private String gpt;
 }
