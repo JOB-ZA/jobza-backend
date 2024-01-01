@@ -1,6 +1,7 @@
 # 🔎 부산 잡자
 > 부산광역시 청년층 취업을 위한 맞춤형 구직상담 서비스
-<br>
+
+<br><br>
 
 ## 📘 프로젝트 개요
 해당 프로젝트는 부산광역시의 청년 취업률 개선을 목표로 하여, 청년들에게 맞춤형 구직 정보를 제공하는 **AI 기반의 구직플랫폼**입니다. 
@@ -37,20 +38,18 @@
   
 ### 로드뷰 제공
 * 기업 주변을 로드뷰로 확인 가능
-<br><br>
+<br><br><br>
 
 ## 🔧 Architecture
 ![image](https://github.com/JOB-ZA/jobza-backend/assets/97269799/5cf8145b-c5d9-4fa5-8b48-cfc4940c17ff)
-<br><br>
+<br><br><br><br>
 
 ### 프로젝트 기간
 * 기획 및 설계 : 2023.09
 * 프로젝트 개발 : 2023.10 ~ 2023.10
-<br><br>
+<br><br><br>
 
 ### 구성원
 * 백엔드: [김진수](https://github.com/dgjinsu)
 * 프론트엔드 1명 [서효진](https://github.com/Hyojinezz)
 * 데이터분석 2명 [손원석](https://github.com/FarmingWon), [구해윤](https://github.com/jmango61)
-
-## 프로젝트 배경
