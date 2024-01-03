@@ -70,7 +70,6 @@ dependencies {
 
 	//csv_reader
 	implementation 'com.opencsv:opencsv:5.5'
-
 }
 
 tasks.named('test') {
