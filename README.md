@@ -51,7 +51,6 @@
 - Spring Security, JWT, Oauth2.0
 - mysql 8.0.28
 - mongoDB
-- 
 ### DevOps
 - Github Action,
 - AWS(EC2, RDS, S3, Code Deploy
